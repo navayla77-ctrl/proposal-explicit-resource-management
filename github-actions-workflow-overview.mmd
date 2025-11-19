@@ -1,0 +1,31 @@
+```mermaid
+flowchart TD
+    A["Push to 'main' branch"] -->|Triggers| B["CI - Test Features (.github/workflows/test-all.yaml)"]
+    A -->|Triggers| C["Release dev container features (.github/workflows/release.yaml)"]
+    A -->|Triggers| D["Shell Script Linter (.github/workflows/linter-automated.yaml)"]
+    A -->|Triggers| E["Update Documentation (.github/workflows/update-documentation.yml)"]
+    A -->|Triggers| F["Validate devcontainer-feature.json (.github/workflows/validate-metadata-files.yml)"]
+
+    subgraph Testing
+        B --> B1["Test Features (matrix builds)"]
+        B --> B2["Test Scenarios (per feature)"]
+        B --> B3["Test Global Scenarios"]
+    end
+
+    subgraph Release
+        C --> C1["Publish Features using devcontainers/action"]
+    end
+
+    subgraph Lint
+        D --> D1["Run Shell Linter on src/**/*.sh"]
+    end
+
+    subgraph Documentation
+        E --> E1["Generate Documentation"]
+        E1 --> E2["Create PR for documentation update"]
+    end
+
+    subgraph Validation
+        F --> F1["Validate all devcontainer-feature.json files"]
+    end
+```
